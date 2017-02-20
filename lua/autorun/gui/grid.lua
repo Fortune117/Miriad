@@ -1,12 +1,12 @@
 
 --[[--
- ▄▀▀█▄▄   ▄▀▀█▄▄▄▄  ▄▀▀▀▀▄  ▄▀▀▄ ▀▀▄  ▄▀▀▄ ▀▄  ▄▀▄▄▄▄  
-█ ▄▀   █ ▐  ▄▀   ▐ █ █   ▐ █   ▀▄ ▄▀ █  █ █ █ █ █    ▌ 
-▐ █    █   █▄▄▄▄▄     ▀▄   ▐     █   ▐  █  ▀█ ▐ █      
-  █    █   █    ▌  ▀▄   █        █     █   █    █      
- ▄▀▄▄▄▄▀  ▄▀▄▄▄▄    █▀▀▀       ▄▀    ▄▀   █    ▄▀▄▄▄▄▀ 
-█     ▐   █    ▐    ▐          █     █    ▐   █     ▐  
-▐         ▐                    ▐     ▐        ▐   
+ ▄▀▀█▄▄   ▄▀▀█▄▄▄▄  ▄▀▀▀▀▄  ▄▀▀▄ ▀▀▄  ▄▀▀▄ ▀▄  ▄▀▄▄▄▄
+█ ▄▀   █ ▐  ▄▀   ▐ █ █   ▐ █   ▀▄ ▄▀ █  █ █ █ █ █    ▌
+▐ █    █   █▄▄▄▄▄     ▀▄   ▐     █   ▐  █  ▀█ ▐ █
+  █    █   █    ▌  ▀▄   █        █     █   █    █
+ ▄▀▄▄▄▄▀  ▄▀▄▄▄▄    █▀▀▀       ▄▀    ▄▀   █    ▄▀▄▄▄▄▀
+█     ▐   █    ▐    ▐          █     █    ▐   █     ▐
+▐         ▐                    ▐     ▐        ▐
 --]]--
 
 local lg = love.graphics
@@ -19,91 +19,139 @@ function PANEL:initialize()
 	self.gridObjects = {}
 	self.xgap = 5
 	self.ygap = 5
-end 
+end
 
-function PANEL:setColumnWidth( n )	
+function PANEL:setColumnWidth( n )
 	self.columnWidth = n
-end 
+	self:arrangeGrid()
+end
 
 function PANEL:getColumnWidth()
-	return self.columnWidth 
-end 
+	return self.columnWidth
+end
 
-function PANEL:setRowHeight( n ) 
-	self.rowHeight = n 
-end 
+function PANEL:setRowHeight( n )
+	self.rowHeight = n
+	self:arrangeGrid()
+end
 
 function PANEL:getRowHeight()
 	return self.rowHeight
 end
 
 function PANEL:setXGap( gap )
-	self.xgap = gap 
-end 
+	self.xgap = gap
+	self:arrangeGrid()
+end
 
 function PANEL:getXGap()
 	return self.xgap
-end 
+end
 
 function PANEL:setYGap( gap )
-	self.ygap = gap 
-end 
+	self.ygap = gap
+	self:arrangeGrid()
+end
 
 function PANEL:getYGap()
-	return self.ygap 
-end 
+	return self.ygap
+end
 
 function PANEL:setGap( x, y )
-	self.xgap = x; self.ygap = y 
-end 
+	self.xgap = x; self.ygap = y
+	self:arrangeGrid()
+end
 
 function PANEL:getGap()
 	return self.xgap, self.ygap
-end 
+end
 
 function PANEL:arrangeGrid()
 
-	local children = self:getChildren()
 	local rowH = self:getRowHeight()
 	local colW = self:getColumnWidth()
 
-	local r = math.floor( (self:getHeight()/rowH) )
-	local c = math.floor( (self:getWidth()/colW) )
+	local rows = math.ceil( (self:getHeight()/rowH) )
+	local cols = math.ceil( (self:getWidth()/colW) )
 
 	local gridObjects = self:getGridObjects()
-	for i = 1,#gridObjects do 
-		local xmod = i%c
-		local ymod = math.floor( i/c )
-		local x = xmod*( colW + self:getXGap() )
-		local y = ymod*( rowH + self:getYGap() )
-		gridObjects[ i ]:setPos( x - colW/2, y - rowH/2 )
-		gridObjects[ i ]:setSize( colW, colH )
-	end 
+	local count = 0
+	for r = 1,rows do
+		for c = 1,cols do
+			if count >= #gridObjects then
+				break
+			end
 
-end 
+			local k = (r-1)*cols + c
+
+			local xgap = self:getXGap()
+			local ygap = self:getYGap()
+
+			local w,h = gridObjects[ k ]:getSize()
+
+			local x = (colW + xgap)*( c - 1 ) + w/cols
+			local y = (rowH + ygap)*( r - 1 ) + ygap/rows
+
+			gridObjects[ k ]:setPos( x, y )
+
+			count = count + 1
+		end
+	end
+
+end
 
 function PANEL:getGridObjects()
 	return self.gridObjects
-end 
+end
 
-function PANEL:add( panel )	
+function PANEL:add( panel )
 	panel:setParent( self )
 	table.insert( self.gridObjects, panel )
 	self:arrangeGrid()
-end 
+end
 
 function PANEL:onSizeChanged()
 	self:arrangeGrid()
-end 
+end
 
 function PANEL:onChildAdded( panel )
-end 
+end
 
 function PANEL:onChildRemoved( panel )
 	lume.remove( self.gridObjects, panel )
-end 
+end
 
 function PANEL:paint()
+	local rowH = self:getRowHeight()
+	local colW = self:getColumnWidth()
+
+	local rows = math.ceil( (self:getHeight()/rowH) )
+	local cols = math.ceil( (self:getWidth()/colW) )
+
+	local gridObjects = self:getGridObjects()
+	local count = 0
+	for r = 1,rows do
+		for c = 1,cols do
+			if count >= #gridObjects then
+				break
+			end
+
+			local k = (r-1)*rows + c
+
+			local xgap = self:getXGap()
+			local ygap = self:getYGap()
+
+			local x = (colW + xgap)*( c - 1 )
+			local y = (rowH + ygap)*( r - 1 )
+
+			lg.setColor( 255, 255, 255, 255 )
+			lg.rectangle( "fill", x, y, colW, rowH )
+
+			print( "owo")
+
+			count = count + 1
+		end
+	end
 end
 
 gui.register( "grid", PANEL, "panel" )

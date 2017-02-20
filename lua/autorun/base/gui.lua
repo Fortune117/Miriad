@@ -165,22 +165,20 @@ function gui.draw()
 
 		local parent = panel:getParent()
 
-		local paintw,painth = w,h
-
 		lg.translate( transx, transy )
 			if panel:clampDrawing() then
 				lg.setScissor( clipx, clipy, clipw, cliph )
 			end
 			while parent do
-				if parent:clampDrawing() then 
+				if parent:clampDrawing() then
 					local px, py = parent:getPos()
 					local pw, ph = parent:getSize()
-					love.graphics.intersectScissor( px, py, pw, ph )
-				end 
+					lg.intersectScissor( px, py, pw, ph )
+				end
 				parent = parent:getParent()
 			end
-			panel:paint( paintw, painth )
-			panel:paintOver( paintw, painth )
+			panel:paint( w, h )
+			panel:paintOver( w, h )
 			lg.setScissor()
 		lg.origin()
 

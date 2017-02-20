@@ -1,12 +1,12 @@
 
 --[[--
- ▄▀▀█▄▄   ▄▀▀█▄▄▄▄  ▄▀▀▀▀▄  ▄▀▀▄ ▀▀▄  ▄▀▀▄ ▀▄  ▄▀▄▄▄▄  
-█ ▄▀   █ ▐  ▄▀   ▐ █ █   ▐ █   ▀▄ ▄▀ █  █ █ █ █ █    ▌ 
-▐ █    █   █▄▄▄▄▄     ▀▄   ▐     █   ▐  █  ▀█ ▐ █      
-  █    █   █    ▌  ▀▄   █        █     █   █    █      
- ▄▀▄▄▄▄▀  ▄▀▄▄▄▄    █▀▀▀       ▄▀    ▄▀   █    ▄▀▄▄▄▄▀ 
-█     ▐   █    ▐    ▐          █     █    ▐   █     ▐  
-▐         ▐                    ▐     ▐        ▐   
+ ▄▀▀█▄▄   ▄▀▀█▄▄▄▄  ▄▀▀▀▀▄  ▄▀▀▄ ▀▀▄  ▄▀▀▄ ▀▄  ▄▀▄▄▄▄
+█ ▄▀   █ ▐  ▄▀   ▐ █ █   ▐ █   ▀▄ ▄▀ █  █ █ █ █ █    ▌
+▐ █    █   █▄▄▄▄▄     ▀▄   ▐     █   ▐  █  ▀█ ▐ █
+  █    █   █    ▌  ▀▄   █        █     █   █    █
+ ▄▀▄▄▄▄▀  ▄▀▄▄▄▄    █▀▀▀       ▄▀    ▄▀   █    ▄▀▄▄▄▄▀
+█     ▐   █    ▐    ▐          █     █    ▐   █     ▐
+▐         ▐                    ▐     ▐        ▐
 --]]--
 
 local lg = love.graphics
@@ -22,31 +22,40 @@ function PANEL:initialize()
 
 	self:setSize( w, h )
 
+	local gw, gh =  w - border*2, h - border*2
 	self.grid = gui.create( "grid", self )
 	self.grid:setPos( border, border )
-	self.grid:setSize( w - border*2, h - border*2 )
+	self.grid:setSize( gw, gh )
+	self.grid:setColumnWidth( gw/3 )
+	self.grid:setRowHeight( gh/2 )
+	self.grid:setXGap( 5 )
 
-	function self.grid:paint( w, h )
-		lg.setColor( 60, 60, 60, 255 )
-		lg.rectangle( "fill", 0, 0, self:getWidth(), self:getHeight() )
-	end 
 
 	self:loadCardsToGrid()
 
-end 
+end
 
 function PANEL:getCardList()
 	return self.cardList
-end  
+end
+
+function PANEL:getCardWidth()
+	return self.grid:getWidth()/5
+end
+
+function PANEL:getCardHeight()
+	return self:getCardWidth()*1.5
+end
 
 function PANEL:loadCardsToGrid()
 	local list = self:getCardList()
-	for k,v in pairs( list ) do 
+	for k,v in pairs( list ) do
 		local button = gui.create( "button" )
 		button:setText( v.name )
+		button:setSize( self:getCardWidth(), self:getCardHeight() )
 		self.grid:add( button )
-	end 	
-end 
+	end
+end
 
 
 function PANEL:paint()
