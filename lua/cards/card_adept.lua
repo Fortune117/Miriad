@@ -1,7 +1,7 @@
 
 local CARD = {}
 CARD.name = "Adept"
-CARD.description = "Battlecry: Draw a Card" --displayed below the cards name
+CARD.description = "Battlecry: Draw a card" --displayed below the cards name
 CARD.quality = 1 -- card quality from 1-4. 1 is common, 4 is legendary
 CARD.attack = 2 -- how much damage the card does
 CARD.health = 3 -- how much health the card has
