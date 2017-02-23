@@ -65,3 +65,10 @@ function math.round(num, idp)
   local mult = 10^(idp or 0)
   return math.floor(num * mult + 0.5) / mult
 end
+
+-- this rounds a number to the closest exponent of x ie.
+-- i.e. if n = 17.3 and x = 2 it will round to 16 (2^4)
+function math.roundToBaseOf( n, x ) 
+	a = log( n )/log( x )
+	return x^math.floor( a )
+end 

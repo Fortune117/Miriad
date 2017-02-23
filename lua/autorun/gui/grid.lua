@@ -71,10 +71,11 @@ function PANEL:arrangeGrid()
 	local rowH = self:getRowHeight()
 	local colW = self:getColumnWidth()
 
-	local rows = math.ceil( (self:getHeight()/rowH) )
-	local cols = math.ceil( (self:getWidth()/colW) )
-
 	local gridObjects = self:getGridObjects()
+
+	local cols = math.ceil( self:getWidth()/colW )
+	local rows = math.ceil( #gridObjects/cols )
+
 	local count = 0
 	for r = 1,rows do
 		for c = 1,cols do
@@ -89,8 +90,8 @@ function PANEL:arrangeGrid()
 
 			local w,h = gridObjects[ k ]:getSize()
 
-			local x = (colW + xgap)*( c - 1 ) + w/cols
-			local y = (rowH + ygap)*( r - 1 ) + ygap/rows
+			local x = (colW + xgap)*( c - 1 ) + ( colW - w )/2
+			local y = (rowH + ygap)*( r - 1 ) + ( rowH - h )/2 
 
 			gridObjects[ k ]:setPos( x, y )
 
@@ -110,6 +111,11 @@ function PANEL:add( panel )
 	self:arrangeGrid()
 end
 
+function PANEL:clearGrid()
+	lume.each( self:getGridObjects(), "remove" )
+	self.gridObjects = {}
+end 
+
 function PANEL:onSizeChanged()
 	self:arrangeGrid()
 end
@@ -118,40 +124,42 @@ function PANEL:onChildAdded( panel )
 end
 
 function PANEL:onChildRemoved( panel )
-	lume.remove( self.gridObjects, panel )
+	--lume.remove( self.gridObjects, panel )
 end
 
-function PANEL:paint()
-	local rowH = self:getRowHeight()
-	local colW = self:getColumnWidth()
+function PANEL:paint( w, h )
+	lg.setColor( 120, 120, 120, 255 )
+	lg.rectangle( "fill", 0, 0, w, h )
+	-- local rowH = self:getRowHeight()
+	-- local colW = self:getColumnWidth()
 
-	local rows = math.ceil( (self:getHeight()/rowH) )
-	local cols = math.ceil( (self:getWidth()/colW) )
+	-- local rows = math.ceil( (self:getHeight()/rowH) )
+	-- local cols = math.ceil( (self:getWidth()/colW) )
 
-	local gridObjects = self:getGridObjects()
-	local count = 0
-	for r = 1,rows do
-		for c = 1,cols do
-			if count >= #gridObjects then
-				break
-			end
+	-- local gridObjects = self:getGridObjects()
+	-- local count = 0
+	-- for r = 1,rows do
+	-- 	for c = 1,cols do
+	-- 		if count >= #gridObjects then
+	-- 			break
+	-- 		end
 
-			local k = (r-1)*rows + c
+	-- 		local k = (r-1)*rows + c
 
-			local xgap = self:getXGap()
-			local ygap = self:getYGap()
+	-- 		local xgap = self:getXGap()
+	-- 		local ygap = self:getYGap()
 
-			local x = (colW + xgap)*( c - 1 )
-			local y = (rowH + ygap)*( r - 1 )
+	-- 		local x = (colW + xgap)*( c - 1 )
+	-- 		local y = (rowH + ygap)*( r - 1 )
 
-			lg.setColor( 255, 255, 255, 255 )
-			lg.rectangle( "fill", x, y, colW, rowH )
+	-- 		lg.setColor( 255, 255, 255, 255 )
+	-- 		lg.rectangle( "fill", x, y, colW, rowH )
 
-			print( "owo")
+	-- 		print( "owo")
 
-			count = count + 1
-		end
-	end
+	-- 		count = count + 1
+	-- 	end
+	-- end
 end
 
 gui.register( "grid", PANEL, "panel" )

@@ -1,11 +1,18 @@
 
 local CARD = {}
-CARD.name = "Devil"
-CARD.attack = 1
-CARD.health = 1
-CARD.mana 	= 1
-CARD.type 	= "minion"
-
+CARD.name = "spider mommy"
+CARD.description = "83% *wink*" --displayed below the cards name
+CARD.quality = 1/2 -- card quality from 1-4. 1 is common, 4 is legendary
+CARD.attack = 1 -- how much damage the card does
+CARD.health = 2 -- how much health the card has
+CARD.mana 	= -1 -- how much mana it takes to summon the card
+CARD.attacks= -1 -- how many times the card can attack
+CARD.type 	= "minion" -- For now, this is just minion and spell
+CARD.classes= { "brain dead" } --This will be used for cards that are part of a group, like "demons", "beasts", etc.
+--[[
+	Effect:
+		mostly uselesss
+]]--
 
 function CARD:initializeInternal() --callled when the card is created
 end
@@ -73,4 +80,4 @@ end
 function CARD:think()
 end
 
-CARDS:register( "card_devil", CARD, "card_minion_base" )
+CARDS:register( "card_spidermommy", CARD, "card_minion_base" )

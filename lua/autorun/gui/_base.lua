@@ -81,7 +81,6 @@ function PANEL:setParent( pnl )
 	local parent = self:getParent()
 	if parent then
 		lume.remove( parent:getChildren(), self )
-		parent.__children = new_children
 		parent:onChildRemoved( self )
 	end
 	self.__parent = pnl
@@ -379,11 +378,9 @@ end
 
 function PANEL:remove()
 
-	gui.assertPositions()
 	local parent = self:getParent()
 	if parent then
 		lume.remove( parent:getChildren(), self )
-		parent.__children = new_children
 		parent:onChildRemoved( self )
 	end
 
@@ -398,6 +395,7 @@ function PANEL:remove()
 	if self:isModal() then
 		gui.setModal( nil )
 	end
+
 	gui.remove( self )
 	gui.generateDrawOrder()
 

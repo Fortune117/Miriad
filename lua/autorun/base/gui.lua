@@ -352,7 +352,7 @@ function gui.scale( widthScale, heightScale )
 end
 
 function gui.remove( pnl )
-	table.remove( gui.objects, pnl.__tablepos )
+	lume.remove( gui.objects, pnl )
 	gui.assertPositions()
 end
 

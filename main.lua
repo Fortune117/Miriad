@@ -46,7 +46,7 @@ end
 	the draw hook.
 --]]----------------------------------------
 
-love.graphics.setDefaultFilter( "nearest", "nearest", 16 )
+love.graphics.setDefaultFilter( "linear", "linear", 16 )
 function love.draw()
 end
 

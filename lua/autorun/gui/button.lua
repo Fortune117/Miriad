@@ -22,7 +22,7 @@ function PANEL:_initialize()
 	self.__down_delay = 0.5
 	self.__down_time = 0
 	self.__alpha = 240
-	self.__color = { 230, 230, 230, 240 }
+	self.__color = { 200, 200, 200, 240 }
 	self:setTextColor( 60, 60, 60, 255 )
 	self:setGradient( 2 )
 	self:setFont( defaultFont )

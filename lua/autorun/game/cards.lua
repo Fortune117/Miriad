@@ -13,11 +13,14 @@ CARDS.board.activeBoard = nil
 local cache = {}
 function CARDS:register( name, card, base )
 
+	card.__class = name 
+
 	base = base or false 
 	local cbase = self.index[ base ]
 	if not cbase and base then 
 		cache[ name ] = { cdata = card, cbase = base }
 	elseif cbase then
+		card.__baseClass = cbase 
 		local cdata = setmetatable( card, { __index = cbase } )
 		self.index[ name ] = cdata
 	else 
