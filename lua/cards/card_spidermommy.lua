@@ -2,7 +2,7 @@
 local CARD = {}
 CARD.name = "spider mommy"
 CARD.description = "83% *wink*" --displayed below the cards name
-CARD.quality = 1/2 -- card quality from 1-4. 1 is common, 4 is legendary
+CARD.quality = CARD_EPIC -- card quality from 1-4. 1 is common, 4 is legendary
 CARD.attack = 1 -- how much damage the card does
 CARD.health = 2 -- how much health the card has
 CARD.mana 	= -1 -- how much mana it takes to summon the card

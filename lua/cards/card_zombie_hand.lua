@@ -2,7 +2,7 @@
 local CARD = {}
 CARD.name = "Reanimated Hand"
 CARD.description = "" --displayed below the cards name
-CARD.quality = 1 -- card quality from 1-4. 1 is common, 4 is legendary
+CARD.quality = CARD_COMMON -- card quality from 1-4. 1 is common, 4 is legendary
 CARD.attack = 1 -- how much damage the card does
 CARD.health = 1 -- how much health the card has
 CARD.mana 	= 0 -- how much mana it takes to summon the card

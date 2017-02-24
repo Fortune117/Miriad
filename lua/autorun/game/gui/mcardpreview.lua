@@ -19,6 +19,9 @@ function PANEL:initialize()
 	self:scaleElements( self:getSize() )
 end
 
+function PANEL:doClick()
+end 
+
 function PANEL:setCardData( card )
 	self.cardData = card
 end
@@ -47,6 +50,11 @@ function PANEL:getQuality()
 	return self:getCardData():getQuality()
 end
 
+function PANEL:getQualityColor()
+	local q = self:getQuality()
+	return CARDS:getQualityColor( q )
+end 
+
 function PANEL:getDescription()
 	return self:getCardData():getDescription()
 end
@@ -71,42 +79,47 @@ function PANEL:onSizeChanged( oldw, oldh, w, h )
 	self:scaleElements( w, h )
 end
 
+local backgroundColor = { lume.rgba( 0xff40404f ) }
 function PANEL:drawBackGround( w, h )
-	lg.setColor( 100, 100, 100, 255 )
+	lg.setColor( 0, 0, 0, 255 )
+	lg.rectangle( "fill", -2, -2, w+4, h+4 )
+	lg.setColor( unpack( backgroundColor ) )
 	lg.rectangle( "fill", 0, 0, w, h )
-	lg.setColor( 160, 160, 160, 255 )
-	lg.rectangle( "line", 1, 1, w-2, h-2 )
 end
 
 
 local manaSizeMult = 0.12 -- we use this to determine the size of the 'stat bubbles'
 local statSizeMult = 0.12 -- we use this to determine the size of the 'stat bubbles'
 local nameBarSizeMult = 0.09 -- we use this to determine the size of the 'stat bubbles'
+local qualityBubbleSizeMult = 0.025 -- we use this to determine the size of the 'stat bubbles'
 local descSizeMult = 0.05 -- we use this to determine the size of the 'stat bubbles'
-local textWhite = { lume.rgba(0xFFE5E5E5) }
+local textWhite = { lume.rgba( 0xffEeEeEe ) }
+local textBlack = { lume.rgba( 0xff000000 ) }
 
 function PANEL:scaleElements( w, h )
 
 	self.manaBubbleSize = w*manaSizeMult
 	self.statBubbleSize = w*statSizeMult
 	self.nameBarSize = h*nameBarSizeMult
+	self.qualityBubbleSize = h*qualityBubbleSizeMult
 
 	local fSize = math.floor( self.statBubbleSize*1.5 )
-	self.manaFont = lg.newFont( fSize )
+	self.manaFont = lg.newFont( "resources/fonts/Roboto-Regular.ttf", fSize )
 
 	local fSize = math.floor( self.statBubbleSize*1.3 )
-	self.statFont = lg.newFont( fSize )
+	self.statFont = lg.newFont( "resources/fonts/Roboto-Regular.ttf", fSize )
 
-	local fSize = math.max( 1, math.floor( self.nameBarSize*0.8 ) )
-	self.nameFont = lg.newFont( fSize )
+	local fSize = math.max( 1, math.floor( self.nameBarSize*0.78 ) )
+	self.nameFont = lg.newFont( "resources/fonts/Cinzel-Bold.ttf", fSize )
+	self.nameHighlightFont = lg.newFont( "resources/fonts/Cinzel-Bold.ttf", fSize )
 
 	local fSize = math.max( 1, math.floor( h*descSizeMult ) )
-	self.descFont = lg.newFont( fSize )
+	self.descFont = lg.newFont( "resources/fonts/Roboto-Regular.ttf", fSize )
 
 end
 
-local manaBlue = { lume.rgba(0xFF3f71ab) }
-local manaBlack = { lume.rgba(0xe5191919) }
+local manaBlue = { lume.rgba( 0xFF3f71ab ) }
+local manaBlack = { lume.rgba( 0xff000000 ) }
 local manaBorder = 2
 
 function PANEL:drawMana( w, h )
@@ -117,42 +130,70 @@ function PANEL:drawMana( w, h )
 	local y = manaBorder + size/2
 
 	lg.setColor( unpack( manaBlue ) )
-	lg.circle( "fill", x, y, size, 100 )
+	lg.circle( "fill", x, y, size, 75 )
 	lg.setColor( unpack( manaBlack ) )
-	lg.circle( "line", x, y, size, 100 )
+	lg.circle( "line", x, y, size, 75 )
+	lg.circle( "line", x, y, size+(1/3), 75 )
 
 	lg.setFont( self.manaFont )
 
 	local text = self:getManaCost()
 	local tw,th = lg.getFont():getWidth( text ), lg.getFont():getHeight( text )
+
+	local tx, ty =  x - tw/2, y - th/2
+	lg.setColor( unpack( textBlack ) )
+	lg.print( text, tx + 1, ty + 1 )
 	lg.setColor( unpack( textWhite ) )
-	lg.print( text, x - tw/2, y - th/2 )
+	lg.print( text, tx, ty )
 
 end
 
-local nameBar = { lume.rgba(0xFF8c8c8c) }
-local nameBarShadow = { lume.rgba(0x96000000) }
+local nameBar = { lume.rgba( 0xFF737387 ) }
+local nameBarShadow = { lume.rgba( 0xef000000 ) }
 function PANEL:drawName( w, h )
 
-	local barW = w*1.05
+	local barW = w*1
 	local barH = self.nameBarSize
 
 	local x = ( w - barW )/2
 	local y = (5*h)/9 - barH/2
 
+	local size = self.qualityBubbleSize
+	local qx, qy = w/2, y + barH + size/2
+	local c = self:getQualityColor()
+
+	lg.setColor( unpack( c ) )
+	lg.circle( "fill", qx, qy, size, 75 )
+
+	lg.setColor( unpack( c ) )
+	lg.circle( "line", qx, qy, size, 75 )
+	lg.setColor( unpack( manaBlack ) )
+	lg.circle( "line", qx, qy, size+(1/3), 75 )
+
+----------------------------------------------------------------
 	lg.setColor( unpack( nameBarShadow ) )
-	lg.rectangle( "fill", 0, y + 2, w, barH )
+	lg.rectangle( "fill", x - 1, y - 1, barW + 2, barH + 2 )
 
 	lg.setColor( unpack( nameBar ) )
 	lg.rectangle( "fill", x, y, barW, barH )
 
 
+	local text = self:getName()
+	local tw,th = self.nameFont:getWidth( text ), self.nameFont:getHeight( text )
+
+	local tx, ty = ( w - tw)/2, (5*h)/9 - th/2 
+
+	lg.setFont( self.nameHighlightFont )
+
+	lg.setColor( unpack( textBlack ) )
+	lg.print( text, tx+1, ty + 1 )
+
+
 	lg.setFont( self.nameFont )
 
-	local text = self:getName()
-	local tw,th = lg.getFont():getWidth( text ), lg.getFont():getHeight( text )
 	lg.setColor( unpack( textWhite ) )
-	lg.print( text, w/2 - tw/2, (5*h)/9 - th/2  )
+	lg.print( text, tx, ty )
+
 
 end
 
@@ -180,34 +221,44 @@ function PANEL:drawDescription( w, h )
 		local ty = y - avgTextH*( #wrappedText/2 - i + 1 ) - th/2
 
 		local tx = ( w - tw )/2
+
+		lg.setColor( unpack( textBlack ) )
+		lg.print( str, tx + 1, ty + 1 )
+
+		lg.setColor( unpack( textWhite ) )
 		lg.print( str, tx, ty )
 
 	end
 
-
 end
 
-local healthRed = { lume.rgba(0xFFff4e50) }
-local damageYellow = { lume.rgba(0xFFe6a02a) }
+local healthRed = { lume.rgba( 0xFFff4e50 ) }
+local damageYellow = { lume.rgba( 0xFFe6a02a ) }
 local statBorder = 2
 function PANEL:drawStats( w, h )
 
 	local size = self.statBubbleSize
 
 	local x = statBorder + size/2
-	local y = h - size/2
+	local y = h - size/2 - statBorder
 
 	lg.setColor( unpack( damageYellow ) )
 	lg.circle( "fill", x, y, size, 100 )
 	lg.setColor( unpack( manaBlack ) )
-	lg.circle( "line", x, y, size, 100 )
+	lg.circle( "line", x, y, size, 75 )
+	lg.circle( "line", x, y, size+(1/3), 75 )
 
 	lg.setFont( self.statFont )
 
 	local text = self:getAttack()
 	local tw,th = lg.getFont():getWidth( text ), lg.getFont():getHeight( text )
+	local tx, ty =  x - tw/2, y - th/2
+
+	lg.setColor( unpack( textBlack ) )
+	lg.print( text, tx + 1, ty + 1 )
+
 	lg.setColor( unpack( textWhite ) )
-	lg.print( text, x - tw/2, y - th/2 )
+	lg.print( text, tx, ty )
 
 	local x = w - size/2 - statBorder
 	local y = h - size/2 - statBorder
@@ -215,14 +266,20 @@ function PANEL:drawStats( w, h )
 	lg.setColor( unpack( healthRed ) )
 	lg.circle( "fill", x, y, size, 100 )
 	lg.setColor( unpack( manaBlack ) )
-	lg.circle( "line", x, y, size, 100 )
+	lg.circle( "line", x, y, size, 75 )
+	lg.circle( "line", x, y, size+(1/3), 75 )
 
 	lg.setFont( self.statFont )
 
 	local text = self:getHealth()
 	local tw,th = lg.getFont():getWidth( text ), lg.getFont():getHeight( text )
+	local tx, ty =  x - tw/2, y - th/2
+
+	lg.setColor( unpack( textBlack ) )
+	lg.print( text, tx + 1, ty + 1 )	
+
 	lg.setColor( unpack( textWhite ) )
-	lg.print( text, x - tw/2, y - th/2 )
+	lg.print( text, tx, ty )
 
 end
 

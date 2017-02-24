@@ -9,6 +9,18 @@ CARDS.board.index = {}
 CARDS.board.maxMinions = 8
 CARDS.board.activeBoard = nil
 
+CARD_COMMON = 1
+CARD_RARE = 2
+CARD_EPIC = 3
+CARD_LEGENDARY = 4
+
+CARDS.qualityColors =
+{
+	[ CARD_COMMON ] = { 200, 200, 200, 255 },
+	[ CARD_RARE ] = { 100, 115, 250, 255 },
+	[ CARD_EPIC ] = { lume.rgba( 0xff8e30b0 ) },
+	[ CARD_LEGENDARY ] = { 178, 120, 25, 255 }
+}
 
 local cache = {}
 function CARDS:register( name, card, base )
@@ -111,6 +123,10 @@ function CARDS:removeFromDeck( deckName, cardName )
 		end 
 	end
 
+end 
+
+function CARDS:getQualityColor( q )
+	return self.qualityColors[ q ] or { 230, 230, 230, 255 }
 end 
 
 local boardCache = {}

@@ -2,7 +2,7 @@
 local CARD = {}
 CARD.name = "Zombie Head"
 CARD.description = "" --displayed below the cards name
-CARD.quality = 4 -- card quality from 1-4. 1 is common, 4 is legendary
+CARD.quality = CARD_LEGENDARY -- card quality from 1-4. 1 is common, 4 is legendary
 CARD.attack = 100 -- how much damage the card does
 CARD.health = 0 -- how much health the card has
 CARD.mana 	= 0 -- how much mana it takes to summon the card

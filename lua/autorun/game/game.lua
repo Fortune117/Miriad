@@ -103,7 +103,12 @@ end
 function decks:focus()
 end 
 
-function decks:keypressed()
+function decks:keypressed( key )
+	if key == "right" then 
+		self.ui.cardlist.next:doClick()
+	elseif key == "left" then 
+		self.ui.cardlist.prev:doClick()
+	end 
 end 
 
 function decks:keyreleased()

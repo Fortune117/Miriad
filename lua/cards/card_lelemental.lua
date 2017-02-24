@@ -2,7 +2,7 @@
 local CARD = {}
 CARD.name = "Lesser Elemental"
 CARD.description = "" --displayed below the cards name
-CARD.quality = 2 -- card quality from 1-4. 1 is common, 4 is legendary
+CARD.quality = CARD_RARE -- card quality from 1-4. 1 is common, 4 is legendary
 CARD.attack = 2 -- how much damage the card does
 CARD.health = 3 -- how much health the card has
 CARD.mana 	= 2 -- how much mana it takes to summon the card

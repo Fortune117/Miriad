@@ -26,9 +26,15 @@ function PANEL:initialize()
 						local found = lume.find( filter, card:getClass() ) or false 
 						return not found 
 					end,
-					true )
+					true )	
 
-	--self.cardList = lume.sort( self.cardList, "mana" )
+	
+	local cardArray = {}
+	for k,v in pairs( self.cardList ) do 
+		cardArray[ #cardArray + 1 ] = v 
+	end 
+
+	self.cardList = lume.sort( cardArray, "mana" )
 
 	local w, h = love.graphics.getDimensions()
 
@@ -53,7 +59,8 @@ function PANEL:initialize()
 	self.next:setTextColor( 255, 255, 255, 255 )
 	function self.next:doClick()
 		local p = self:getParent():getParent()
-		p:setPage( p:getPage() + 1 )
+		local newPage = p:getPage() + 1
+		p:setPage( newPage )
 	end 
 	function self.next:paint()
 	end
@@ -65,7 +72,8 @@ function PANEL:initialize()
 	self.prev:setTextColor( 255, 255, 255, 255 )
 	function self.prev:doClick()
 		local p = self:getParent():getParent()
-		p:setPage( p:getPage() - 1 )
+		local newPage = p:getPage() - 1
+		p:setPage( newPage )
 	end 
 	function self.prev:paint()
 	end
@@ -89,6 +97,16 @@ end
 function PANEL:setPage( n )
 	local m = math.ceil( lume.count( self:getCardList() )/numCards )
 	local newPage = lume.clamp( n, 1, m )
+	if m == 1 then -- i hate if statements. and people. they made me do this :(
+		self.next:setText( "" )
+		self.prev:setText( "" )
+	elseif newPage == m then 
+		self.next:setText( "" )
+		self.prev:setText( "<" )
+	elseif newPage == 1 then 
+		self.next:setText( ">" )
+		self.prev:setText( "" )
+	end 
 	if newPage ~= self.page then 
 		self.page = newPage
 		self:loadCardsToGrid( self.page )
@@ -104,21 +122,22 @@ function PANEL:loadCardsToGrid( page )
 	self.grid:clearGrid()
 	local list = self:getCardList()
 	local startNumber = numCards*(page-1)
-	local count = 1
-	for k,v in pairs( list ) do
-		if count > startNumber and count <= numCards*page then  
-			local preview = gui.create( "mcardpreview" )
-			preview:setText( v.name )
-			preview:setSize( self:getCardWidth(), self:getCardHeight() )
-			preview:setCardData( v )
-			self.grid:add( preview )
+	for i = 1,#list do
+		if i > startNumber then
+			if i <= numCards*page then 
+				local card = list[ i ]
+				local preview = gui.create( "mcardpreview" )
+				preview:setText( card.name )
+				preview:setSize( self:getCardWidth(), self:getCardHeight() )
+				preview:setCardData( card )
+				self.grid:add( preview )
+			end 
 		end 
-		count = count + 1
 	end
 end
 
 function PANEL:paint( w, h )
-	lg.setColor( 35, 35, 35, 255 )
+	lg.setColor( 65, 65, 65, 255 )
 	lg.rectangle( "fill", 0, 0, w, h )
 end
 gui.register( "mcardlist", PANEL, "panel" )

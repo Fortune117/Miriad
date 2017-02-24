@@ -2,7 +2,7 @@
 local CARD = {}
 CARD.name = "matt brown"
 CARD.description = "matt brown" --displayed below the cards name
-CARD.quality = 500 -- card quality from 1-4. 1 is common, 4 is legendary
+CARD.quality = CARD_LEGENDARY -- card quality from 1-4. 1 is common, 4 is legendary
 CARD.attack = 90 -- how much damage the card does
 CARD.health = math.huge -- how much health the card has
 CARD.mana 	= math.pi -- how much mana it takes to summon the card
