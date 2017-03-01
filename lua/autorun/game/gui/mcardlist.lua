@@ -21,18 +21,18 @@ function PANEL:initialize()
 
 
 	local filter = { "card_minion_base", "card_spell_base" }
-	self.cardList = lume.filter( list, 
+	self.cardList = lume.filter( list,
 					function( card )
-						local found = lume.find( filter, card:getClass() ) or false 
-						return not found 
+						local found = lume.find( filter, card:getClass() ) or false
+						return not found
 					end,
-					true )	
+					true )
 
-	
+
 	local cardArray = {}
-	for k,v in pairs( self.cardList ) do 
-		cardArray[ #cardArray + 1 ] = v 
-	end 
+	for k,v in pairs( self.cardList ) do
+		cardArray[ #cardArray + 1 ] = v
+	end
 
 	self.cardList = lume.sort( cardArray, "mana" )
 
@@ -49,7 +49,7 @@ function PANEL:initialize()
 	self.grid:setXGap( 0 )
 	self.grid:setYGap( 0 )
 
-	self.grid.paint = self.paint 
+	self.grid.paint = self.paint
 
 	local bw = (gw - self:getCardWidth()*4)/(numCards) - 2
 	self.next = gui.create( "button", self.grid )
@@ -61,7 +61,7 @@ function PANEL:initialize()
 		local p = self:getParent():getParent()
 		local newPage = p:getPage() + 1
 		p:setPage( newPage )
-	end 
+	end
 	function self.next:paint()
 	end
 
@@ -74,7 +74,7 @@ function PANEL:initialize()
 		local p = self:getParent():getParent()
 		local newPage = p:getPage() - 1
 		p:setPage( newPage )
-	end 
+	end
 	function self.prev:paint()
 	end
 
@@ -87,7 +87,7 @@ function PANEL:getCardList()
 end
 
 function PANEL:getCardWidth()
-	return self.grid:getWidth()/5
+	return self.grid:getHeight()/3.5
 end
 
 function PANEL:getCardHeight()
@@ -100,43 +100,43 @@ function PANEL:setPage( n )
 	if m == 1 then -- i hate if statements. and people. they made me do this :(
 		self.next:setText( "" )
 		self.prev:setText( "" )
-	elseif newPage == m then 
+	elseif newPage == m then
 		self.next:setText( "" )
 		self.prev:setText( "<" )
-	elseif newPage == 1 then 
+	elseif newPage == 1 then
 		self.next:setText( ">" )
 		self.prev:setText( "" )
-	end 
-	if newPage ~= self.page then 
+	end
+	if newPage ~= self.page then
 		self.page = newPage
 		self:loadCardsToGrid( self.page )
-	end 
-end 
+	end
+end
 
 function PANEL:getPage()
-	return self.page 
-end 
+	return self.page
+end
 
-local clear = false 
+local clear = false
 function PANEL:loadCardsToGrid( page )
-	local master = self 
+	local master = self
 	self.grid:clearGrid()
 	local list = self:getCardList()
 	local startNumber = numCards*(page-1)
 	for i = 1,#list do
 		if i > startNumber then
-			if i <= numCards*page then 
+			if i <= numCards*page then
 				local card = list[ i ]
 				local preview = gui.create( "mcardpreview" )
 				preview:setText( card.name )
 				preview:setSize( self:getCardWidth(), self:getCardHeight() )
 				preview:setCardData( card )
-				function preview:doClick() 
+				function preview:doClick()
 					master:onCardClicked( self )
-				end 
+				end
 				self.grid:add( preview )
-			end 
-		end 
+			end
+		end
 	end
 end
 

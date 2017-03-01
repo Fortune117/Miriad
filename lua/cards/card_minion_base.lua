@@ -11,145 +11,150 @@ CARD.type 	= "minion" -- For now, this is just minion and spell
 CARD.classes= {} --This will be used for cards that are part of a group, like "demons", "beasts", etc.
 
 function CARD:initializeInternal() --callled when the card is created
-end 
+end
 
 function CARD:initialize() --called when the card is created, immediately after the internal call
-end 
+end
 
 function CARD:canPlay( board ) -- returns true or false to determine if the card can be played
-end 
+	local field = board:getActiveField()
+	if #field >= board:getMaxFieldSize() then
+		return false
+	end
+	return true 
+end
 
 function CARD:onPlay( board ) -- called immediately after the card is played
-end 
+end
 
 function CARD:onDestroyed()
-end 
+end
 
 function CARD:destroy( board ) -- called to remove the card from play, doesn't trigger death rattles. e.g. burning from overdraw
 	self:onDestroyed( board )
-end 
+end
 
 function CARD:onDeath( board ) -- called when the card is removed from play
-end 
+end
 
 function CARD:onDrawnFromDeck( board ) -- called when the card is drawn from the deck
-end 
+end
 
 function CARD:drawFromDeck( board ) -- draws the card from the deck
-end 
+end
 
 function CARD:onCardDrawn( card, board ) -- called when a card is drawn
-end 
+end
 
 function CARD:onTurnStartFromHand( board ) -- called when a turn starts and this card is in the hand
-end 
+end
 
 function CARD:onTurnEndFromHand( board ) -- called when a turn ends and this card is in the hand
-end 
+end
 
 function CARD:onTurnStart( board ) -- called when a turn stars and this card is in play
-end 
+end
 
 function CARD:onTurnEnd( board ) -- called when a turn ends and this card is in play
-end 
+end
 
 function CARD:onAttack( target, board ) -- called when this card attacks another
-end 
+end
 
 function CARD:onDefend( attacker, board ) -- called when this card is attacked by another
-end 
+end
 
 function CARD:onKill( target, board ) -- called when this card kills another
-end 
+end
 
 function CARD:onKilled( attacker, board ) -- called when a card kills this card
-end 
+end
 
 function CARD:onCardDeath( card, board ) -- called whenever a card in play dies
-end 
+end
 
 function CARD:onCardPlayed( card, board ) -- called when a card is played
-end 
+end
 
 function CARD:inPlay()
-end 
+end
 
 function CARD:thinkInternal()
 end
 
 function CARD:think()
-end 
+end
 
 function CARD:getClass() -- this returns a string
-	return self.__class 
-end 
+	return self.__class
+end
 
 function CARD:getBaseClass() --this returns another class object
-	return self.__baseClass 
-end 
+	return self.__baseClass
+end
 
 function CARD:setManaCost( n )
-	self.mana = n 
+	self.mana = n
 end
 
 function CARD:getManaCost()
-	return self.mana 
-end 
+	return self.mana
+end
 
 function CARD:setHealth( n )
-	self.health = n 
-end 
+	self.health = n
+end
 
 function CARD:getHealth()
-	return self.health 
-end 
+	return self.health
+end
 
 function CARD:setAttack( n )
-	self.attack = n 
-end 
+	self.attack = n
+end
 
 function CARD:getAttack()
 	return self.attack
-end 
+end
 
 function CARD:setAttacks( n )
-	self.attacks = n 
-end 
+	self.attacks = n
+end
 
 function CARD:getAttacks()
-	return self.attacks 
-end 
+	return self.attacks
+end
 
 function CARD:getQuality()
-	return self.quality 
-end 
+	return self.quality
+end
 
 function CARD:getDescription()
 	return self.description
-end 
+end
 
 function CARD:getType()
-	return self.type 
-end 
+	return self.type
+end
 
 function CARD:getClasses()
 	return self.classes
-end 
+end
 
 function CARD:isClass( class )
 	return self:getClasses()[ class ]
-end 
+end
 
 function CARD:getName()
-	return self.name 
-end 
+	return self.name
+end
 
 function CARD:setPlayer( player )
-	self.player = player 
-end 
+	self.player = player
+end
 
 function CARD:getPlayer()
-	return self.player 
-end 
+	return self.player
+end
 
 CARDS:register( "card_minion_base", CARD )
