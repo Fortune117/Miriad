@@ -119,6 +119,7 @@ end
 
 local clear = false 
 function PANEL:loadCardsToGrid( page )
+	local master = self 
 	self.grid:clearGrid()
 	local list = self:getCardList()
 	local startNumber = numCards*(page-1)
@@ -130,10 +131,17 @@ function PANEL:loadCardsToGrid( page )
 				preview:setText( card.name )
 				preview:setSize( self:getCardWidth(), self:getCardHeight() )
 				preview:setCardData( card )
+				function preview:doClick() 
+					master:onCardClicked( self )
+				end 
 				self.grid:add( preview )
 			end 
 		end 
 	end
+end
+
+function PANEL:onCardClicked( cardPanel ) -- called whena card on the preview panel is clicked
+
 end
 
 function PANEL:paint( w, h )

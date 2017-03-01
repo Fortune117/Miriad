@@ -159,7 +159,7 @@ function PANEL:drawName( w, h )
 	local y = (5*h)/9 - barH/2
 
 	local size = self.qualityBubbleSize
-	local qx, qy = w/2, y + barH + size/2
+	local qx, qy = w/2, y + barH
 	local c = self:getQualityColor()
 
 	lg.setColor( unpack( c ) )
@@ -169,7 +169,6 @@ function PANEL:drawName( w, h )
 	lg.circle( "line", qx, qy, size, 75 )
 	lg.setColor( unpack( manaBlack ) )
 	lg.circle( "line", qx, qy, size+(1/3), 75 )
-
 ----------------------------------------------------------------
 	lg.setColor( unpack( nameBarShadow ) )
 	lg.rectangle( "fill", x - 1, y - 1, barW + 2, barH + 2 )
