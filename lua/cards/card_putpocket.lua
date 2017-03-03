@@ -1,27 +1,29 @@
 
 local CARD = {}
-CARD.name = "matt brown"
-CARD.description = "matt brown" --displayed below the cards name
-CARD.quality = CARD_LEGENDARY -- card quality from 1-4. 1 is common, 4 is legendary
-CARD.attack = 3 -- how much damage the card does
-CARD.maxAttack = 3 -- default damage the card does
-CARD.health = 3 -- how much health the card has
-CARD.maxHealth = 3 -- the regular max health a card has
-CARD.mana 	= 3 -- how much mana it takes to summon the card
-CARD.defaultMana = 3 -- how much mana it normally takes to summon the card
-CARD.attacks    = 1 -- how many times the card can attack
+CARD.name = "Put Pocket"
+CARD.description = "Battlecry: Your opponent draws a card." --displayed below the cards name
+CARD.quality = CARD_COMMON -- card quality from 1-4. 1 is common, 4 is legendary
+CARD.attack = 4 -- how much damage the card does
+CARD.maxAttack = 4 -- default damage the card does
+CARD.health = 4 -- how much health the card has
+CARD.maxHealth = 4 -- the regular max health a card has
+CARD.mana 	= 2 -- how much mana it takes to summon the card
+CARD.defaultMana = 2 -- how much mana it normally takes to summon the card
+CARD.attacks= 1 -- how many times the card can attack
 CARD.maxAttacks	= 1 -- how many times the card can attack by default
 CARD.type 	= "minion" -- For now, this is just minion and spell
-CARD.classes= { "matt brown" } --This will be used for cards that are part of a group, like "demons", "beasts", etc.
+CARD.classes= {} --This will be used for cards that are part of a group, like "demons", "beasts", etc.
 --[[
 	Effect:
-		matt brown
+		Draw a card
 ]]--
 
 function CARD:initialize() --called when the card is created, immediately after the internal call
 end
 
 function CARD:onPlay() -- called immediately after the card is played
+    local board = self:getBoard()
+    board:drawCard( board:getInactivePlayer() )
 end
 
 function CARD:onDeath() -- called when the card is removed from play
@@ -69,4 +71,4 @@ end
 function CARD:think()
 end
 
-CARDS:register( "card_mattbrown", CARD, "card_minion_base" )
+CARDS:register( "card_putpocket", CARD, "card_minion_base" )

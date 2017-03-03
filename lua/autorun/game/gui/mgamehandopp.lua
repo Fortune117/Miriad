@@ -51,12 +51,7 @@ function PANEL:loadData( player, maxSize )
 		local w = h/math.sqrt( 2 )
 		local card = gui.create( "mcardpreview" )
 		card:setSize( w, h )
-		card:setCardData( hand[ i ] )
-		function card.doClick()
-			if hand[ i ]:canPlay() then
-				self:playCard( hand[ i ])
-			end
-		end
+		card:flip()
 		self:add( card )
 	end
 	self:arrangeGrid()
@@ -67,10 +62,6 @@ function PANEL:getBoard()
 	return self:getParent():getBoard()
 end
 
-function PANEL:playCard( card )
-	local board = self:getBoard()
-	board:playCard( card, board:getActivePlayer())
-end
 
 local manaBlue = { lume.rgba( 0xFF3f71ab ) }
 local manaFadedBlue = { lume.rgba( 0xFF112642 ) }
@@ -123,9 +114,9 @@ function PANEL:paint( w, h )
 	lg.setColor( 60, 60, 60, 255 )
 	lg.rectangle( "fill", 0, 0, w, h )
 	lg.setColor( 0, 0, 0, 255 )
-	lg.line( 0, 0, w, 0 )
+	lg.line( 0, h, w, h )
 
 	self:drawMana( w, h )
 
 end
-gui.register( "mgamehand", PANEL, "grid" )
+gui.register( "mgamehandopp", PANEL, "grid" )

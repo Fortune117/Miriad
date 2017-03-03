@@ -1,29 +1,33 @@
 
 local CARD = {}
 CARD.name = "Imp"
-CARD.description = "" --displayed below the cards name
+CARD.description = "Deal 3 damage to all other minions" --displayed below the cards name
 CARD.quality = CARD_COMMON -- card quality from 1-4. 1 is common, 4 is legendary
 CARD.attack = 2 -- how much damage the card does
+CARD.maxAttack = 2 -- default damage the card does
 CARD.health = 2 -- how much health the card has
+CARD.maxHealth = 2 -- the regular max health a card has
 CARD.mana 	= 1 -- how much mana it takes to summon the card
+CARD.defaultMana = 1 -- how much mana it normally takes to summon the card
 CARD.attacks= 1 -- how many times the card can attack
+CARD.maxAttacks	= 1 -- how many times the card can attack by default
 CARD.type 	= "minion" -- For now, this is just minion and spell
 CARD.classes= { "infernal" } --This will be used for cards that are part of a group, like "demons", "beasts", etc.
 
+CARD.blastDamage = 3
 
-function CARD:initializeInternal() --callled when the card is created
-end
 
 function CARD:initialize() --called when the card is created, immediately after the internal call
 end
 
-function CARD:canPlay() -- returns true or false to determine if the card can be played
-end
-
-function CARD:play() -- plays the card into the field
-end
-
-function CARD:onPlay() -- called immediately after the card is played
+function CARD:onPlay() -- called before after the card is played
+    local board = self:getBoard()
+    local minions = board:getAllMinions()
+    for i = 1,#minions do
+        if minions[ i ] ~= self then
+            minions[ i ]:takeDamage( self, false, self.blastDamage )
+        end
+    end
 end
 
 function CARD:destroy() -- called to remove the card from play
@@ -69,9 +73,6 @@ function CARD:onCardDeath() -- called whenever a card in play dies
 end
 
 function CARD:onCardPlayed() -- called when a card is played
-end
-
-function CARD:thinkInternal()
 end
 
 function CARD:think()

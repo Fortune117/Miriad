@@ -2,8 +2,9 @@
 local BOARD = {}
 BOARD.name = "Base Board"
 BOARD.desc = "not much tbh"
+BOARD.maxMana = 10
 BOARD.maxHandSize = 9 -- max number of cards you can have in your hand
-BOARD.startHandSize = 5 -- how many cards you start off with
+BOARD.startHandSize = 4 -- how many cards you start off with
 BOARD.player2BonusCards = 1 -- how many extra cards should player 2 get when the game starts.
 BOARD.maxFieldSize = 7 -- max number of minions on the board
 
@@ -60,19 +61,29 @@ function BOARD:thinkInternal( dt )
 end
 
 function BOARD:think( dt )
+	local hand1 = self:getActiveHand()
+	for i = 1,#hand1 do
+		hand1[ i ]:thinkInternal()
+		hand1[ i ]:think()
+	end
+	local hand2 = self:getInactiveHand()
+	for i = 1,#hand2 do
+		hand2[ i ]:thinkInternal()
+		hand2[ i ]:think()
+	end
 end
 
 function BOARD:setUI( panel )
-	self.ui = panel 
-end 
+	self.ui = panel
+end
 
 function BOARD:getUI()
-	return self.ui 
-end 
+	return self.ui
+end
 
 function BOARD:updateUI()
 	self:getUI():updateBoard( self )
-end 
+end
 
 function BOARD:getName()
 	return self.name
@@ -91,7 +102,7 @@ function BOARD:getTurn()
 end
 
 function BOARD:getNextTurn() -- get the opposite turns number
-	return lume.pingpong( self:getTurn() - 1 ) + 1  -- maths magic. should flip between 1 and 2
+	return math.loop( self:getTurn(), 1, 2 )  -- maths magic. should flip between 1 and 2
 end
 
 -- returns the data for the player who is currently having their turn
@@ -162,6 +173,7 @@ function BOARD:startTurn()
 		local field = self:getActiveField()
 		for k = 1,#field do
 			field[ k ]:onTurnStart( self )
+			field[ k ]:setAttacks( field[ k ]:getMaxAttacks() )
 		end
 
 		for k = 1,#ply.hand do
@@ -170,8 +182,37 @@ function BOARD:startTurn()
 
 	end
 
-	self:onTurnStart( self:getActivePlayer() )
+	local activePlayer = self:getActivePlayer()
 
+	self:increaseMaxMana( activePlayer )
+	self:fillMana( activePlayer )
+
+	self:onTurnStart( activePlayer )
+
+end
+
+function BOARD:setMaxMana( player, n )
+	player.maxMana = math.clamp( n, 1, self.maxMana )
+end
+
+function BOARD:getMaxMana( player )
+	return player.maxMana
+end
+
+function BOARD:setMana( player, n )
+	player.mana = math.clamp( n, 0, self.maxMana )
+end
+
+function BOARD:getMana( player )
+	return player.mana
+end
+
+function BOARD:increaseMaxMana( player )
+	self:setMaxMana( player, math.min( self:getMaxMana( player ) + 1, self.maxMana ) )
+end
+
+function BOARD:fillMana( player )
+	self:setMana( player, self:getMaxMana( player ) )
 end
 
 function BOARD:setUp() -- called after players are loaded and should be called only once.
@@ -179,6 +220,10 @@ function BOARD:setUp() -- called after players are loaded and should be called o
 	for i = 1,#plys do
 		local ply = plys[ i ]
 		ply.deck = lume.shuffle( ply.deck )
+		lume.each( ply.deck, function( card )
+			card:setOwner( ply )
+			card:setBoard( self )
+		end )
 		local drawCount = self.maxHandSize + ( i == #plys and self.player2BonusCards or 0 )
 		for n = 1,drawCount do
 			self:drawCard( ply )
@@ -227,18 +272,19 @@ function BOARD:burnCard( player, card )
 end
 
 function BOARD:fatigue()
-end 
+end
 
 function BOARD:onCardDrawn( player, card )
 end
 
 function BOARD:drawCard( player, card )
 
+	player = player or self:getActivePlayer()
 	local deck = self:getDeck( player )
 	local hand = self:getHand( player )
 	local card = card or lume.last( deck )
 
-	if card then 
+	if card then
 		lume.remove( deck, card )
 
 		local len = #hand
@@ -249,9 +295,9 @@ function BOARD:drawCard( player, card )
 			card:onDrawnFromDeck( self )
 			self:addToHand( player, card )
 		end
-	else 
+	else
 		self:fatigue()
-	end 
+	end
 
 	self:updateUI()
 
@@ -271,11 +317,15 @@ end
 
 function BOARD:getActiveHand()
 	return self:getHand( self:getActivePlayer() )
-end 
+end
 
-function BOARD:getField()
-	return self.field 
-end 
+function BOARD:getInactiveHand()
+	return self:getHand( self:getInactivePlayer() )
+end
+
+function BOARD:getField( pid )
+	return self.field[ pid ]
+end
 
 function BOARD:getMaxFieldSize()
 	return self.maxFieldSize
@@ -298,26 +348,50 @@ function BOARD:getAllMinions()
 
 end
 
-function BOARD:canPlayCard( card, player ) -- we call this before we call playCard, not during (better practice)
-	return card:canPlay( self )
+function BOARD:updateFieldSlots()
+	local field1 = self:getField( 1 )
+	for i = 1,#field1 do
+		field1[ i ].id = i
+	end
+	local field2 = self:getField( 2 )
+	for i = 1,#field2 do
+		field2[ i ].id = i
+	end
 end
 
-function BOARD:playCard( card, slot, player )
+function BOARD:removeCardFromField( card )
+	table.remove( self:getField( card.fieldid ), card.id )
+	self:updateFieldSlots()
+	self:updateUI()
+end
+
+function BOARD:canPlayCard( card, player ) -- we call this before we call playCard, not during (better practice)
+	return card:canPlay()
+end
+
+function BOARD:playCard( card, player, slot )
 
 	local pid = player.id
 	local field = self:getField( pid )
 	slot = slot or #field + 1
 
-	field[ slot ] = table.copy( card )
+	field[ slot ] = card
+	field[ slot ].id = slot
+	field[ slot ].fieldid = pid
+	field[ slot ]:setInPlay( true )
+	field[ slot ]:setAttacks( 0 )
 
-	field[ slot ]:onPlay( self )
+	lume.remove( self:getHand( player ), card )
+
+	self:setMana( player, self:getMana( player ) - card.mana )
+
+	field[ slot ]:onPlay()
 
 	local minions = self:getAllMinions()
 	for i = 1,#minions do
-		minions[ i ]:onCardPlayed( field[ slot ], self )
+		minions[ i ]:onCardPlayed( field[ slot ] )
 	end
 
-	lume.remove( self:getHand( player ), card )
 
 	self:updateUI()
 

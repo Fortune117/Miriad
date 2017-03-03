@@ -1,6 +1,6 @@
 
 gameState.list.menu = {}
-local menu = gameState.list.menu 
+local menu = gameState.list.menu
 function menu:init()
 	self.ui = {}
 end
@@ -9,7 +9,7 @@ function menu:enter( prev )
 
 	local w,h = love.graphics.getDimensions()
 	self.ui.mainpage = gui.create( "mpanel" )
-	local page = self.ui.mainpage 
+	local page = self.ui.mainpage
 	page:setPos( 0, 0 )
 	page:setSize( w, h )
 
@@ -21,31 +21,39 @@ function menu:enter( prev )
 	-- deckButton:setParent( page )
 	-- function deckButton:doClick()
 	-- 	gameState.switch( gameState.list.decks )
-	-- end 
+	-- end
 
 	local deck1 = CARDS:createDeck( "deck1" )
 	CARDS:addToDeck( "deck1", "card_adept" )
 	CARDS:addToDeck( "deck1", "card_imp" )
 	CARDS:addToDeck( "deck1", "card_lelemental" )
-	CARDS:addToDeck( "deck1", "card_zombie" )	
-	
+	CARDS:addToDeck( "deck1", "card_zombie" )
+	CARDS:addToDeck( "deck1", "card_beserker" )
+	CARDS:addToDeck( "deck1", "card_putpocket" )
+
 	local deck2 = CARDS:createDeck( "deck2" )
 	CARDS:addToDeck( "deck2", "card_adept" )
 	CARDS:addToDeck( "deck2", "card_imp" )
 	CARDS:addToDeck( "deck2", "card_lelemental" )
-	CARDS:addToDeck( "deck2", "card_zombie" )	
+	CARDS:addToDeck( "deck2", "card_zombie" )
+	CARDS:addToDeck( "deck2", "card_beserker" )
+	CARDS:addToDeck( "deck2", "card_putpocket" )
 
-	local player1 = 
+	local player1 =
 	{
 		name = "Fortune",
 		hp = 30,
+		mana = 1,
+		maxMana = 1,
 		deck = deck1,
 		hand = {}
-	}	
-	local player2 = 
+	}
+	local player2 =
 	{
 		name = "DeSync",
 		hp = 30,
+		mana = 0,
+		maxMana = 0,
 		deck = deck2,
 		hand = {}
 	}
@@ -57,38 +65,38 @@ function menu:enter( prev )
 	startButton:setParent( page )
 	function startButton:doClick()
 		gameState.switch( gameState.list.board, player1, player2 )
-	end 
+	end
 
-end 
+end
 
 function menu:leave()
-	for k,v in pairs( self.ui ) do 
+	for k,v in pairs( self.ui ) do
 		v:remove()
-	end 
-end 
+	end
+end
 
 function menu:update( dt )
 	gui.update()
-end 
+end
 
 function menu:draw()
 	local t = love.timer.getTime()
 	hook.call( "paint", t )
 	gui.draw( t )
-end 
+end
 
 function menu:focus()
-end 
+end
 
 function menu:keypressed()
-end 
+end
 
 function menu:keyreleased()
-end 
+end
 
 function menu:mousepressed( x, y, button )
 	gui.buttonCheck( x, y, button )
-end 
+end
 
 function menu:mousereleased( x, y, button, istouch )
 	gui.buttonReleased( x, y, button, istouch )
@@ -96,14 +104,14 @@ end
 
 function menu:wheelmoved(dx, dy)
 	gui.wheelMoved( dx, dy )
-end 
+end
 
 function menu:quit()
-end 
+end
 
 gameState.list.decks = {}
 
-local decks = gameState.list.decks 
+local decks = gameState.list.decks
 function decks:init()
 	self.ui = {}
 end
@@ -112,45 +120,45 @@ function decks:enter( prev )
 
 	local w,h = love.graphics.getDimensions()
 	self.ui.cardlist = gui.create( "mcardlist" )
-	local cardlist = self.ui.cardlist  
+	local cardlist = self.ui.cardlist
 	cardlist:setPos( 0, 0 )
 	cardlist:setSize( w, h )
 
-end 
+end
 
 function decks:leave()
-	for k,v in pairs( self.ui ) do 
+	for k,v in pairs( self.ui ) do
 		v:remove()
-	end 
-end 
+	end
+end
 
 function decks:update( dt )
 	gui.update()
-end 
+end
 
 function decks:draw()
 	local t = love.timer.getTime()
 	hook.call( "paint", t )
 	gui.draw( t )
-end 
+end
 
 function decks:focus()
-end 
+end
 
 function decks:keypressed( key )
-	if key == "right" then 
+	if key == "right" then
 		self.ui.cardlist.next:doClick()
-	elseif key == "left" then 
+	elseif key == "left" then
 		self.ui.cardlist.prev:doClick()
-	end 
-end 
+	end
+end
 
 function decks:keyreleased()
-end 
+end
 
 function decks:mousepressed( x, y, button )
 	gui.buttonCheck( x, y, button )
-end 
+end
 
 function decks:mousereleased( x, y, button, istouch )
 	gui.buttonReleased( x, y, button, istouch )
@@ -158,10 +166,10 @@ end
 
 function decks:wheelmoved(dx, dy)
 	gui.wheelMoved( dx, dy )
-end 
+end
 
 function decks:quit()
-end 
+end
 
 
 gameState.list.game = {}

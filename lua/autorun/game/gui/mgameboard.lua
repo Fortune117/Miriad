@@ -1,12 +1,12 @@
 
 --[[--
- ▄▀▀█▄▄   ▄▀▀█▄▄▄▄  ▄▀▀▀▀▄  ▄▀▀▄ ▀▀▄  ▄▀▀▄ ▀▄  ▄▀▄▄▄▄  
-█ ▄▀   █ ▐  ▄▀   ▐ █ █   ▐ █   ▀▄ ▄▀ █  █ █ █ █ █    ▌ 
-▐ █    █   █▄▄▄▄▄     ▀▄   ▐     █   ▐  █  ▀█ ▐ █      
-  █    █   █    ▌  ▀▄   █        █     █   █    █      
- ▄▀▄▄▄▄▀  ▄▀▄▄▄▄    █▀▀▀       ▄▀    ▄▀   █    ▄▀▄▄▄▄▀ 
-█     ▐   █    ▐    ▐          █     █    ▐   █     ▐  
-▐         ▐                    ▐     ▐        ▐   
+ ▄▀▀█▄▄   ▄▀▀█▄▄▄▄  ▄▀▀▀▀▄  ▄▀▀▄ ▀▀▄  ▄▀▀▄ ▀▄  ▄▀▄▄▄▄
+█ ▄▀   █ ▐  ▄▀   ▐ █ █   ▐ █   ▀▄ ▄▀ █  █ █ █ █ █    ▌
+▐ █    █   █▄▄▄▄▄     ▀▄   ▐     █   ▐  █  ▀█ ▐ █
+  █    █   █    ▌  ▀▄   █        █     █   █    █
+ ▄▀▄▄▄▄▀  ▄▀▄▄▄▄    █▀▀▀       ▄▀    ▄▀   █    ▄▀▄▄▄▄▀
+█     ▐   █    ▐    ▐          █     █    ▐   █     ▐
+▐         ▐                    ▐     ▐        ▐
 --]]--
 
 local lg = love.graphics
@@ -14,43 +14,58 @@ local lm = love.mouse
 local PANEL = {}
 
 function PANEL:initialize()
-	self.field = gui.create( "mgamefield" )
-	self.hand  = gui.create( "mgamehand" )
-end 
+	self.field = gui.create( "mgamefield", self )
+	self.hand  = gui.create( "mgamehand", self )
+	self.opphand  = gui.create( "mgamehandopp", self )
+	self.endturn = gui.create( "mendturn", self.field )
+end
 
 function PANEL:onSizeChanged( oldw, oldh, w, h )
 
-	local fieldH = h*0.75
-	self.field:setSize( w, fieldH )
-	self.field:setPos( 0, 0 )
+	local fieldH = h*0.4
+	local handSize = (h - fieldH)/2
 
-	self.hand:setSize( w, h - fieldH )
-	self.hand:setPos( 0, fieldH )
+	self.opphand:setSize( w, handSize )
+	self.opphand:setPos( 0, 0 )
+
+	self.field:setSize( w, fieldH )
+	self.field:setPos( 0, handSize )
+
+	self.hand:setSize( w, handSize )
+	self.hand:setPos( 0, fieldH + handSize )
+
+	local bw = w*0.05
+	local bh = h*0.05
+	self.endturn:setSize( bw, bh )
+	self.endturn:setPos( w - bw, fieldH/2 - bh/2 )
 
 end
 
 function PANEL:getBoard()
-	return self.board 
-end 
+	return self.board
+end
 
 function PANEL:loadBoard( board )
 
-	self.board = board 
+	self.board = board
 	board:setUI( self )
 	self:updateBoard( board )
 
-end 
+end
 
 function PANEL:updateBoard( board )
 
-	self.field:loadData( board.field )
-	self.hand:loadData( board:getActiveHand(), board.maxHandSize )
+	self.field:loadData( board )
+	self.hand:loadData( board:getActivePlayer(), board.maxHandSize )
+	self.opphand:loadData( board:getInactivePlayer(), board.maxHandSize )
 
-end 
+end
 
 function PANEL:paint( w, h )
+
 	lg.setColor( 35, 35, 35, 255 )
 	lg.rectangle( "fill", 0, 0, w, h )
+
 end
 
 gui.register( "mgameboard", PANEL, "base" )

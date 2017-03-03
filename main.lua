@@ -40,6 +40,7 @@ function love.load()
 	gameState.registerEvents()
 	gameState.switch( gameState.list.menu )
 	love.math.setRandomSeed( os.time() )
+    math.randomseed( os.time() )
 end
 
 --[[----------------------------------------

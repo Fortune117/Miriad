@@ -18,6 +18,7 @@ function PANEL:initialize()
 	self:setClampDrawing( false )
 	self:scaleElements( self:getSize() )
 	self.flipped = false -- this 'turns' the card over so that it shows the back.
+	self:setSelected( false )
 end
 
 function PANEL:doClick()
@@ -35,16 +36,28 @@ function PANEL:getHealth()
 	return self:getCardData():getHealth()
 end
 
+function PANEL:getMaxHealth()
+	return self:getCardData():getMaxHealth()
+end
+
 function PANEL:getManaCost()
 	return self:getCardData():getManaCost()
+end
+
+function PANEL:getDefaultManaCost()
+	return self:getCardData():getDefaultManaCost()
 end
 
 function PANEL:getAttack()
 	return self:getCardData():getAttack()
 end
 
-function PANEL:getAttacks()
+function PANEL:getAttacks() -- returns the number of times the minion can attack.
 	return self:getCardData():getAttacks()
+end
+
+function PANEL:getMaxAttack()
+	return self:getCardData():getMaxAttack()
 end
 
 function PANEL:getQuality()
@@ -84,8 +97,26 @@ function PANEL:flip()
 	self.flipped = not self.flipped
 end
 
+function PANEL:canAttack()
+	return self:getCardData():canAttack()
+end
+
+function PANEL:setSelected( b )
+	self.selected = b
+end
+
+function PANEL:isSelected()
+	return self.selected
+end
+
 local backgroundColor = { lume.rgba( 0xff40404f ) }
 function PANEL:drawBackGround( w, h )
+
+	if self:isSelected() then
+		lg.setColor( 60, 200, 60, 255 )
+		lg.rectangle( "fill", -4, -4, w+8, h+8 )
+	end
+
 	lg.setColor( 0, 0, 0, 255 )
 	lg.rectangle( "fill", -2, -2, w+4, h+4 )
 	lg.setColor( unpack( backgroundColor ) )
@@ -107,6 +138,8 @@ local nameBarSizeMult = 0.09 -- we use this to determine the size of the 'stat b
 local qualityBubbleSizeMult = 0.025 -- we use this to determine the size of the 'stat bubbles'
 local descSizeMult = 0.05 -- we use this to determine the size of the 'stat bubbles'
 local textWhite = { lume.rgba( 0xffEeEeEe ) }
+local textRed = { lume.rgba( 0xffcc343f ) }
+local textGreen = { lume.rgba( 0xff35cc41 ) }
 local textBlack = { lume.rgba( 0xff000000 ) }
 
 function PANEL:scaleElements( w, h )
@@ -156,7 +189,20 @@ function PANEL:drawMana( w, h )
 	local tx, ty =  x - tw/2, y - th/2
 	lg.setColor( unpack( textBlack ) )
 	lg.print( text, tx + 1, ty + 1 )
-	lg.setColor( unpack( textWhite ) )
+
+	local textColor = textWhite
+
+	local defaultMana = self:getDefaultManaCost()
+	local curMana = self:getManaCost()
+
+
+	if curMana > defaultMana then
+		textColor = textRed
+	elseif curMana < defaultMana then
+		textColor = textGreen
+	end
+
+	lg.setColor( unpack( textColor ) )
 	lg.print( text, tx, ty )
 
 end
@@ -269,7 +315,18 @@ function PANEL:drawStats( w, h )
 	lg.setColor( unpack( textBlack ) )
 	lg.print( text, tx + 1, ty + 1 )
 
-	lg.setColor( unpack( textWhite ) )
+	local textColor = textWhite
+
+	local defaultAttack = self:getMaxAttack()
+	local curAttack = self:getAttack()
+
+	if curAttack > defaultAttack then
+		textColor = textGreen
+	elseif curAttack < defaultAttack then
+		textColor = textRed
+	end
+
+	lg.setColor( unpack( textColor ) )
 	lg.print( text, tx, ty )
 
 	local x = w - size/2 - statBorder
@@ -290,7 +347,18 @@ function PANEL:drawStats( w, h )
 	lg.setColor( unpack( textBlack ) )
 	lg.print( text, tx + 1, ty + 1 )
 
-	lg.setColor( unpack( textWhite ) )
+	local textColor = textWhite
+
+	local maxHealth = self:getMaxHealth()
+	local curHealth = self:getHealth()
+
+	if curHealth > maxHealth then
+		textColor = textGreen
+	elseif curHealth < maxHealth then
+		textColor = textRed
+	end
+
+	lg.setColor( unpack( textColor ) )
 	lg.print( text, tx, ty )
 
 end
