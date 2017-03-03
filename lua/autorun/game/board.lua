@@ -6,7 +6,16 @@ function board:init()
 end
 
 function board:enter( prev, player1, player2 )
+    
+    self.ui.gameboard = gui.create( "mgameboard" )
+
+    local w,h = love.graphics.getDimensions()
+    local gb = self.ui.gameboard
+    gb:setSize( w, h )
+    gb:center()
+
     self:loadBoard( "board_base", player1, player2 )
+
 end
 
 function board:leave()
@@ -58,10 +67,17 @@ function board:getBoard()
 end
 
 function board:loadBoard( boardname, player1, player2 )
+
     self:setBoard( CARDS:getBoard( boardname ) )
+    
     local gameBoard = self:getBoard()
     gameBoard:initializeInternal()
     gameBoard:initialize()
     gameBoard:setPlayers( player1, player2 )
+
+    self.ui.gameboard:loadBoard( gameBoard )
+
     gameBoard:setUp()
+
+
 end

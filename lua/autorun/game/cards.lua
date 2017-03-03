@@ -57,16 +57,27 @@ function CARDS:getCard( name )
 end
 
 function CARDS:createDeck( name )
-	self.decks.index[ name ] = { valid = true }
+	self.deck.index[ name ] = { valid = true }
+	return self:getDeck( name )
 end
 
 function CARDS:getDeck( name )
-	return self.decks.index[ name ] or { valid = false }
+	return self.deck.index[ name ] or { valid = false }
 end
 
 function CARDS:isValidDeck( deck )
 	return deck.valid
 end
+
+function CARDS:numCardsInDeck( cardName, deck )
+	local count = 0 
+	for i = 1,#deck do 
+		if deck[ i ].class == cardName then 
+			count = count + 1
+		end 
+	end 
+	return count 
+end 
 
 function CARDS:canUseDeck( deckName )
 
@@ -83,45 +94,26 @@ function CARDS:canAddToDeck( deckName, cardName )
 
 	local deck = self:getDeck( name )
 	if #deck >= self.maxDeckSize then return false end
-	for i = 1,#deck do
-		local deckSlot = deck[ i ]
-		if deckSlot.name == cardName then
-			if deckSlot.count >= self.maxCopiesInDeck then
-				return false
-			end
-		end
-	end
+	if self:numCardsInDeck( cardName ) > self.maxCopiesInDeck then return false end 
 	return true
 
 end
 
 function CARDS:addToDeck( deckName, cardName )
 
-	local deck = self:getDeck( name )
-	for i = 1,#deck do
-		local deckSlot = deck[ i ]
-		if deckSlot.name == cardName then
-			deckSlot.count = deckSlot.count + 1
-			return
-		end
-	end
-	table.insert( deck, { name = cardName, count = 1 } )
+	local deck = self:getDeck( deckName )
+	table.insert( deck, table.copy( self:getCard( cardName ) ) )
 
 end
 
 function CARDS:removeFromDeck( deckName, cardName )
 
-	local deck = self:getDeck( name )
-	for i = 1,#deck do
-		local deckSlot = deck[ i ]
-		if deckSlot.name == cardName then
-			deckSlot.count = deckSlot.count - 1
-			if deckSlot.count <= 0 then
-				table.remove( deck, i )
-			end
-			return
-		end
-	end
+	local deck = self:getDeck( deckName )
+	for i = 1,#deck do 
+		if deck[ i ].class == cardName then 
+			table.remove( deck, i )
+		end 
+	end 
 
 end
 
@@ -142,9 +134,9 @@ function CARDS:registerBoard( name, board, base )
 		boardCache[ name ] = { bdata = board, bbase = base }
 	elseif bbase then
 		local bdata = setmetatable( board, { __index = bbase } )
-		self.board.index[ name ] = cdata
+		self.board.index[ name ] = bdata
 	else
-		self.board.index[ name ] = card
+		self.board.index[ name ] = board
 	end
 
 	for k,v in pairs( boardCache ) do

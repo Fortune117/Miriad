@@ -57,32 +57,62 @@ end
 	Use to merge two different defined panels into one.
 	Called internally, probably shouildn't be called.
 --]]----------------------------------------
+function gui.mergeGUIs( panel, base )
+	local new_panel = {}
+	new_panel = table.merge( table.copy( gui.panels[ base ] ), panel )
+	new_panel.baseClass = table.copy( gui.panels[ base ] )
+	return new_panel
+end
+
+function gui.cacheUI( name, panel, base, bValidBase )
+	gui.cache[ #gui.cache +1 ] = { name, panel, base, bValidBase }
+end
+
+function gui.checkCache( name )
+	if #gui.cache > 0 then
+		for i = 1,#gui.cache do
+			if gui.cache[ i ][ 3 ] == name then
+				gui.cache[ i ][ 4 ] = true
+			end
+		end
+	end
+end
+
+function gui.loadCache()
+	for i = 1,#gui.cache do
+		if gui.cache[ i ][ 4 ] then
+			gui.register( unpack( gui.cache[ i ] ) )
+			gui.cache[ i ] = nil
+		end
+	end
+	if #gui.cache > 0 then
+		gui.loadCache()
+	end
+end
 
 --[[----------------------------------------
 	gui.register( name, panel, base )
 	Used to add panels to the global table.
 --]]----------------------------------------
-local cache = {}
 function gui.register( name, panel, base )
- 	base = base or false
-	local pbase = gui.panels[ base ]
-	if not pbase and base then
-		cache[ name ] = { pdata = panel, pbase = base }
-	elseif pbase then
-		panel.__baseClass = pbase
-		local pdata = setmetatable( panel, { __index = pbase } )
-		gui.panels[ name ] = pdata
+	if base then
+		if not gui.panels[ base ] then
+			gui.cacheUI( name, panel, base )
+		else
+			gui.panels[ name ] = gui.mergeGUIs( panel, base )
+			gui.checkCache( name )
+		end
 	else
 		gui.panels[ name ] = panel
+		gui.checkCache( name )
 	end
 
-	for k,v in pairs( cache ) do
-		if v.pbase == name then
-			gui.register( k, v.pdata, name )
-			cache[ k ] = nil
+	for i = 1,#gui.cache do
+		if gui.cache[ i ][ 4 ] then
+			gui.panels[ gui.cache[ i ][ 1 ] ] = gui.mergeGUIs( gui.cache[ i ][ 2 ], gui.cache[ i ][ 3 ] )
+			gui.cache[ i ] = nil
 		end
 	end
-
 end
 
 function gui.getMaxZ()

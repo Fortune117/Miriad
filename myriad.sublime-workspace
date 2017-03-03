@@ -4,6 +4,42 @@
 		"selected_items":
 		[
 			[
+				"getActive",
+				"getActiveField"
+			],
+			[
+				"onCard",
+				"onCardBurned"
+			],
+			[
+				"player2",
+				"player2BonusCards"
+			],
+			[
+				"quali",
+				"qualityBubbleSize"
+			],
+			[
+				"quality",
+				"qualityBubbleSizeMult"
+			],
+			[
+				"getQual",
+				"getQualityColor"
+			],
+			[
+				"even",
+				"love.event.quit"
+			],
+			[
+				"nameBar",
+				"nameBarShadow"
+			],
+			[
+				"initializ",
+				"initializeText"
+			],
+			[
 				"rowH",
 				"rowHeight"
 			],
@@ -20,37 +56,56 @@
 	"buffers":
 	[
 		{
-			"file": "/C/Users/Aiden/Desktop/Miriad/lua/autorun/game/gui/mcardpreview.lua",
+			"file": "lua/boards/board_base.lua",
 			"settings":
 			{
-				"buffer_size": 1604,
+				"buffer_size": 6448,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/C/Users/Aiden/Desktop/Miriad/main.lua",
+			"file": "lua/autorun/game/gui/mgameboard.lua",
 			"settings":
 			{
-				"buffer_size": 1657,
+				"buffer_size": 1235,
+				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "myriad.sublime-project",
+			"file": "lua/autorun/game/gui/mgamefield.lua",
 			"settings":
 			{
-				"buffer_size": 77,
-				"line_ending": "Unix"
+				"buffer_size": 612,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "Packages/LuaLove.sublime-build",
+			"file": "lua/autorun/game/gui/mgamehand.lua",
 			"settings":
 			{
-				"buffer_size": 615,
+				"buffer_size": 873,
 				"encoding": "UTF-8",
-				"line_ending": "Unix"
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "lua/autorun/game/cards.lua",
+			"settings":
+			{
+				"buffer_size": 3157,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "lua/autorun/gui/grid.lua",
+			"settings":
+			{
+				"buffer_size": 3204,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
 			}
 		}
 	],
@@ -90,7 +145,7 @@
 			]
 		]
 	],
-	"build_varint": "Love2D",
+	"build_varint": "",
 	"command_palette":
 	{
 		"height": 81.0,
@@ -135,37 +190,47 @@
 	"expanded_folders":
 	[
 		"/C/Users/Aiden/Desktop/Miriad",
+		"/C/Users/Aiden/Desktop/Miriad/lua",
 		"/C/Users/Aiden/Desktop/Miriad/lua/autorun",
 		"/C/Users/Aiden/Desktop/Miriad/lua/autorun/game",
-		"/C/Users/Aiden/Desktop/Miriad/lua/autorun/game/gui"
+		"/C/Users/Aiden/Desktop/Miriad/lua/autorun/gui"
 	],
 	"file_history":
 	[
+		"/C/Users/Aiden/Desktop/Miriad/lua/autorun/game/gui/mcardlist.lua",
+		"/C/Users/Aiden/Desktop/Miriad/main.lua",
+		"/C/Users/Aiden/Desktop/Miriad/lua/autorun/game/board.lua",
+		"/C/Users/Aiden/Desktop/Miriad/lua/autorun/game/gui/mpanel.lua",
+		"/C/Users/Aiden/Desktop/Miriad/lua/autorun/game/cards.lua",
+		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_minion_base.lua",
+		"/C/Users/Aiden/Desktop/Miriad/lua/autorun/game/gui/mcardpreview.lua",
+		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_adept.lua",
+		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_blakeanderson.lua",
+		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_imp.lua",
+		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_lelemental.lua",
+		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_mattbrown.lua",
+		"/C/Users/Aiden/Desktop/Miriad/lua/autorun/game/game.lua",
+		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_spidermommy.lua",
+		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_zombie.lua",
+		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_zombie_hand.lua",
+		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_zombie_head.lua",
+		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_zombie_ogre.lua",
+		"/C/Users/Aiden/Desktop/Miriad/conf.lua",
+		"/C/Users/Aiden/Desktop/Miriad/lua/autorun/base/math.lua",
+		"/C/Users/Aiden/Desktop/Lua Modules/hump/timer.lua",
+		"/C/Users/Aiden/Desktop/love toys example/components/graphic/Drawable.lua",
+		"/C/Users/Aiden/Desktop/Miriad/myriad.sublime-project",
+		"/C/Users/Aiden/Desktop/Miriad/Packages/LuaLove.sublime-build",
 		"/C/Users/Aiden/Desktop/myriad.sublime-project",
 		"/C/Users/Aiden/Desktop/Miriad/lua/autorun/gui/grid.lua",
-		"/C/Users/Aiden/Desktop/Miriad/lua/autorun/game/cards.lua",
-		"/C/Users/Aiden/Desktop/Miriad/lua/autorun/game/gui/mcardlist.lua",
-		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_minion_base.lua",
-		"/C/Users/Aiden/Desktop/Miriad/main.lua",
 		"/C/Users/Aiden/Desktop/Miriad/lua/autorun/gui/_base.lua",
 		"/C/Users/Aiden/Desktop/Miriad/lua/autorun/base/gui.lua",
-		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_zombie_head.lua",
-		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_spidermommy.lua",
 		"/C/Users/Aiden/Desktop/_Miriad/lua/autorun/gui/_base.lua",
-		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_zombie.lua",
 		"/C/Users/Aiden/Desktop/_Miriad/lua/autorun/gui.lua",
 		"/C/Users/Aiden/Desktop/Miriad/lua/modules/lume/lume.lua",
 		"/C/Users/Aiden/Desktop/Miriad/lua/modules/lovetoys/spec/engine_entity_spec.lua",
-		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_zombie_hand.lua",
-		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_zombie_ogre.lua",
-		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_mattbrown.lua",
-		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_blakeanderson.lua",
 		"/C/Users/Aiden/Desktop/Miriad/lua/autorun/gui/button.lua",
-		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_adept.lua",
 		"/C/Users/Aiden/Desktop/Miriad/lua/boards/board_base.lua",
-		"/C/Users/Aiden/Desktop/Miriad/conf.lua",
-		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_lelemental.lua",
-		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_imp.lua",
 		"/C/Users/Aiden/Desktop/Miriad/lua/cards/card_spell_base.lua",
 		"/C/Users/Aiden/Desktop/Miriad/lua/autorun/game/global.lua",
 		"/C/Users/Aiden/Desktop/LuaEngine/lua/autorun/base/gui.lua",
@@ -263,6 +328,12 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"getField",
+			"card",
+			"4",
+			"font",
+			")\n",
+			"1",
 			"CARD",
 			"5",
 			"print",
@@ -282,6 +353,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"board",
 			"PANEL",
 			"decks",
 			"BOARD"
@@ -295,53 +367,136 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "/C/Users/Aiden/Desktop/Miriad/lua/autorun/game/gui/mcardpreview.lua",
+					"file": "lua/boards/board_base.lua",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1604,
+						"buffer_size": 6448,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1517,
-								1517
+								4833,
+								4833
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/LuaLove.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/LuaLove.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 596.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "lua/autorun/game/gui/mgameboard.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1235,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1080,
+								1080
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LuaLove.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 195.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "lua/autorun/game/gui/mgamefield.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 612,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								594,
+								594
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LuaLove.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "lua/autorun/game/gui/mgamehand.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 873,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								717,
+								717
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LuaLove.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 1,
-					"file": "/C/Users/Aiden/Desktop/Miriad/main.lua",
+					"buffer": 4,
+					"file": "lua/autorun/game/cards.lua",
 					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 1657,
+						"buffer_size": 3157,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								455,
-								455
+								221,
+								221
 							]
 						],
 						"settings":
@@ -353,16 +508,16 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "myriad.sublime-project",
+					"buffer": 5,
+					"file": "lua/autorun/gui/grid.lua",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 77,
+						"buffer_size": 3204,
 						"regions":
 						{
 						},
@@ -375,42 +530,14 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JSON.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "Packages/LuaLove.sublime-build",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 615,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								257,
-								257
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
+							"syntax": "Packages/LuaLove.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1306.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 5,
 					"type": "text"
 				}
 			]

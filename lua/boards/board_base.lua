@@ -20,6 +20,7 @@ function BOARD:initializeInternal() --callled when the board is created
 		[2] = {}  -- player 2 field
 	}
 	self:setTurn( 1 )
+	self.ui = {}
 end
 
 function BOARD:initialize() --called when the board is created, immediately after the internal call
@@ -61,6 +62,18 @@ end
 function BOARD:think( dt )
 end
 
+function BOARD:setUI( panel )
+	self.ui = panel 
+end 
+
+function BOARD:getUI()
+	return self.ui 
+end 
+
+function BOARD:updateUI()
+	self:getUI():updateBoard( self )
+end 
+
 function BOARD:getName()
 	return self.name
 end
@@ -87,7 +100,7 @@ function BOARD:getActivePlayer()
 end
 
 function BOARD:getInactivePlayer()
-	return self:getPlayer()[ self:getNextTurn() ]
+	return self:getPlayers()[ self:getNextTurn() ]
 end
 
 -- returns the board data for the player currently having their turn
@@ -128,9 +141,13 @@ function BOARD:endTurn()
 
 	self:onTurnEnd( self:getActivePlayer() )
 
+	self:updateUI()
+
 	self:setTurn( self:getNextTurn() )
 
 	self:startTurn()
+
+	self:updateUI()
 
 end
 
@@ -160,8 +177,7 @@ end
 function BOARD:setUp() -- called after players are loaded and should be called only once.
 	local plys = self:getPlayers()
 	for i = 1,#plys do
-		local plyNumber = i
-		local ply = plys[ plyNumber ]
+		local ply = plys[ i ]
 		ply.deck = lume.shuffle( ply.deck )
 		local drawCount = self.maxHandSize + ( i == #plys and self.player2BonusCards or 0 )
 		for n = 1,drawCount do
@@ -207,7 +223,11 @@ function BOARD:burnCard( player, card )
 	card:onBurned( player, board )
 	self:onCardBurned( player, card )
 	card:destroy( self )
+	self:updateUI()
 end
+
+function BOARD:fatigue()
+end 
 
 function BOARD:onCardDrawn( player, card )
 end
@@ -218,14 +238,22 @@ function BOARD:drawCard( player, card )
 	local hand = self:getHand( player )
 	local card = card or lume.last( deck )
 
-	local len = #hand
-	if #hand >= self.maxHandSize then
-		self:burnCard( player, card )
-	else
-		self:onCardDrawn( player, card )
-		card:onDrawnFromDeck( self )
-		self:addToHand( player, card )
-	end
+	if card then 
+		lume.remove( deck, card )
+
+		local len = #hand
+		if #hand >= self.maxHandSize then
+			self:burnCard( player, card )
+		else
+			self:onCardDrawn( player, card )
+			card:onDrawnFromDeck( self )
+			self:addToHand( player, card )
+		end
+	else 
+		self:fatigue()
+	end 
+
+	self:updateUI()
 
 end
 
@@ -240,6 +268,14 @@ end
 function BOARD:getHand( player )
 	return self:getPlayers()[ player.id ].hand
 end
+
+function BOARD:getActiveHand()
+	return self:getHand( self:getActivePlayer() )
+end 
+
+function BOARD:getField()
+	return self.field 
+end 
 
 function BOARD:getMaxFieldSize()
 	return self.maxFieldSize
@@ -280,6 +316,10 @@ function BOARD:playCard( card, slot, player )
 	for i = 1,#minions do
 		minions[ i ]:onCardPlayed( field[ slot ], self )
 	end
+
+	lume.remove( self:getHand( player ), card )
+
+	self:updateUI()
 
 end
 

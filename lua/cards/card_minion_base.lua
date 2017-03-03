@@ -27,6 +27,9 @@ end
 function CARD:onPlay( board ) -- called immediately after the card is played
 end
 
+function CARD:onBurned( board )
+end 
+
 function CARD:onDestroyed()
 end
 

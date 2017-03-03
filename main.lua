@@ -33,6 +33,7 @@ end
 
 
 function love.load()
+	gameState.list = {}
 	loadFiles( "lua/autorun" )
 	loadFiles( "lua/cards" )
 	loadFiles( "lua/boards" )

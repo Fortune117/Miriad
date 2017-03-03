@@ -1,7 +1,5 @@
 
-gameState.list = {}
 gameState.list.menu = {}
-
 local menu = gameState.list.menu 
 function menu:init()
 	self.ui = {}
@@ -15,14 +13,50 @@ function menu:enter( prev )
 	page:setPos( 0, 0 )
 	page:setSize( w, h )
 
+	-- local bw, bh = 200, 50
+	-- local deckButton = gui.create( "button", page2 )
+	-- deckButton:setPos( (w - bw)/2, (h - bh)/2 )
+	-- deckButton:setSize( bw, bh )
+	-- deckButton:setText( "Deck Builder" )
+	-- deckButton:setParent( page )
+	-- function deckButton:doClick()
+	-- 	gameState.switch( gameState.list.decks )
+	-- end 
+
+	local deck1 = CARDS:createDeck( "deck1" )
+	CARDS:addToDeck( "deck1", "card_adept" )
+	CARDS:addToDeck( "deck1", "card_imp" )
+	CARDS:addToDeck( "deck1", "card_lelemental" )
+	CARDS:addToDeck( "deck1", "card_zombie" )	
+	
+	local deck2 = CARDS:createDeck( "deck2" )
+	CARDS:addToDeck( "deck2", "card_adept" )
+	CARDS:addToDeck( "deck2", "card_imp" )
+	CARDS:addToDeck( "deck2", "card_lelemental" )
+	CARDS:addToDeck( "deck2", "card_zombie" )	
+
+	local player1 = 
+	{
+		name = "Fortune",
+		hp = 30,
+		deck = deck1,
+		hand = {}
+	}	
+	local player2 = 
+	{
+		name = "DeSync",
+		hp = 30,
+		deck = deck2,
+		hand = {}
+	}
 	local bw, bh = 200, 50
-	local deckButton = gui.create( "button", page2 )
-	deckButton:setPos( (w - bw)/2, (h - bh)/2 )
-	deckButton:setSize( bw, bh )
-	deckButton:setText( "Deck Builder" )
-	deckButton:setParent( page )
-	function deckButton:doClick()
-		gameState.switch( gameState.list.decks )
+	local startButton = gui.create( "button", page2 )
+	startButton:setPos( (w - bw)/2, (h - bh)/2 )
+	startButton:setSize( bw, bh )
+	startButton:setText( "Test Game" )
+	startButton:setParent( page )
+	function startButton:doClick()
+		gameState.switch( gameState.list.board, player1, player2 )
 	end 
 
 end 

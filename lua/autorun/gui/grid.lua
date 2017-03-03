@@ -13,12 +13,16 @@ local lg = love.graphics
 local lm = love.mouse
 local PANEL = {}
 
-function PANEL:initialize()
+function PANEL:_initialize()
+	--self.baseClass._initialize( self ) -- we do this so that we can modify the init code with whatever we need.
 	self.columnWidth = 25
 	self.rowHeight = 25
 	self.gridObjects = {}
 	self.xgap = 5
 	self.ygap = 5
+end 
+
+function PANEL:initialize()
 end
 
 function PANEL:setColumnWidth( n )
@@ -162,4 +166,4 @@ function PANEL:paint( w, h )
 	-- end
 end
 
-gui.register( "grid", PANEL, "panel" )
+gui.register( "grid", PANEL, "base" )
