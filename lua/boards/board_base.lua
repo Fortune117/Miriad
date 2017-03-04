@@ -4,7 +4,7 @@ BOARD.name = "Base Board"
 BOARD.desc = "not much tbh"
 BOARD.maxMana = 10
 BOARD.maxHandSize = 9 -- max number of cards you can have in your hand
-BOARD.startHandSize = 4 -- how many cards you start off with
+BOARD.startHandSize = 3 -- how many cards you start off with
 BOARD.player2BonusCards = 1 -- how many extra cards should player 2 get when the game starts.
 BOARD.maxFieldSize = 7 -- max number of minions on the board
 
@@ -184,6 +184,8 @@ function BOARD:startTurn()
 
 	local activePlayer = self:getActivePlayer()
 
+	self:drawCard( activePlayer )
+
 	self:increaseMaxMana( activePlayer )
 	self:fillMana( activePlayer )
 
@@ -215,6 +217,24 @@ function BOARD:fillMana( player )
 	self:setMana( player, self:getMaxMana( player ) )
 end
 
+function BOARD:setPlayerHealth( player, n )
+	player.hp = n
+	if player.hp <= 0 then
+		gameState.switch( gameState.list.menu )
+	end
+end
+
+function BOARD:getPlayerHealth( player )
+	return player.hp
+end
+
+function BOARD:dealPlayerDamage( player, attacker, damage )
+	damage = damage or attacker:getAttack()
+	attacker:onDamagePlayer( player, damage )
+	self:setPlayerHealth( player, self:getPlayerHealth( player ) - damage )
+	self:updateUI()
+end
+
 function BOARD:setUp() -- called after players are loaded and should be called only once.
 	local plys = self:getPlayers()
 	for i = 1,#plys do
@@ -224,7 +244,7 @@ function BOARD:setUp() -- called after players are loaded and should be called o
 			card:setOwner( ply )
 			card:setBoard( self )
 		end )
-		local drawCount = self.maxHandSize + ( i == #plys and self.player2BonusCards or 0 )
+		local drawCount = self.startHandSize + ( i == #plys and self.player2BonusCards or 0 )
 		for n = 1,drawCount do
 			self:drawCard( ply )
 		end

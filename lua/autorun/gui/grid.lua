@@ -18,9 +18,9 @@ function PANEL:_initialize()
 	self.columnWidth = 25
 	self.rowHeight = 25
 	self.gridObjects = {}
-	self.xgap = 5
-	self.ygap = 5
-end 
+	self.xgap = 0
+	self.ygap = 0
+end
 
 function PANEL:initialize()
 end
@@ -95,7 +95,7 @@ function PANEL:arrangeGrid()
 			local w,h = gridObjects[ k ]:getSize()
 
 			local x = (colW + xgap)*( c - 1 ) + ( colW - w )/2
-			local y = (rowH + ygap)*( r - 1 ) + ( rowH - h )/2 
+			local y = (rowH + ygap)*( r - 1 ) + ( rowH - h )/2
 
 			gridObjects[ k ]:setPos( x, y )
 
@@ -118,17 +118,14 @@ end
 function PANEL:clearGrid()
 	lume.each( self:getGridObjects(), "remove" )
 	self.gridObjects = {}
-end 
+end
 
 function PANEL:onSizeChanged()
 	self:arrangeGrid()
 end
 
-function PANEL:onChildAdded( panel )
-end
-
-function PANEL:onChildRemoved( panel )
-	--lume.remove( self.gridObjects, panel )
+function PANEL:onRemoved()
+	self:clearGrid()
 end
 
 function PANEL:paint( w, h )

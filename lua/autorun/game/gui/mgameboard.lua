@@ -14,9 +14,9 @@ local lm = love.mouse
 local PANEL = {}
 
 function PANEL:initialize()
-	self.field = gui.create( "mgamefield", self )
 	self.hand  = gui.create( "mgamehand", self )
 	self.opphand  = gui.create( "mgamehandopp", self )
+	self.field = gui.create( "mgamefield", self )
 	self.endturn = gui.create( "mendturn", self.field )
 end
 

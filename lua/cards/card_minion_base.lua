@@ -83,6 +83,9 @@ end
 function CARD:onAttack( target, damage ) -- called when this card attacks another
 end
 
+function CARD:onDamagePlayer( player, damage )
+end
+
 function CARD:onDefend( attacker, damage ) -- called when this card is attacked by another
 end
 

@@ -44,7 +44,7 @@ end
 
 function PANEL:clampDrawing()
 	return self.__clampDrawing
-end 
+end
 
 --[[----------------------------------------
 	PANEL:setRestrictChildClick( b )
@@ -75,7 +75,7 @@ function PANEL:onChildAdded( panel )
 end
 
 function PANEL:onChildRemoved( panel )
-end 
+end
 
 function PANEL:setParent( pnl )
 	local parent = self:getParent()
@@ -376,7 +376,12 @@ end
 function PANEL:onScale( n )
 end
 
+function PANEL:onRemove()
+end 
+
 function PANEL:remove()
+
+	self:onRemove()
 
 	local parent = self:getParent()
 	if parent then
