@@ -33,6 +33,11 @@ end
 
 
 function love.load()
+    local sr,sg,sb = 46, 204, 113
+    local r,g,b = 0,102,200
+
+    local dr, dg, db = sr - r, sg - g, sb - b
+
 	gameState.list = {}
 	loadFiles( "lua/autorun" )
 	loadFiles( "lua/cards" )
@@ -40,7 +45,6 @@ function love.load()
 	gameState.registerEvents()
 	gameState.switch( gameState.list.menu )
 	love.math.setRandomSeed( os.time() )
-    math.randomseed( os.time() )
 end
 
 --[[----------------------------------------
